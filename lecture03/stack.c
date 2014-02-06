@@ -12,7 +12,9 @@ License: GNU GPLv3
 
 int *foo() {
     int i;
-    int array[SIZE];
+    int *array;
+    
+    array = malloc(SIZE * sizeof(int));
 
     printf("%p\n", array);
 
