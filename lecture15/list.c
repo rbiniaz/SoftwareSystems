@@ -49,13 +49,26 @@ int pop(Node **head) {
 
 // Add a new element to the beginning of the list.
 void push(Node **head, int val) {
-    // FILL THIS IN!
+    *head = make_node(val, *head);
 }
 
 // Remove the first element with the given value; return the number
 // of nodes removed.
 int remove_by_value(Node **head, int val) {
-    // FILL THIS IN!
+    Node *current = *head;
+    
+    if (current->val == val){
+    	pop(head);
+    	return 1;
+    }  
+    
+    while (current->next != NULL) {
+    	if (current->next->val == val){
+    		current->next = current->next->next;
+    		return 1;
+    	}	
+    }  
+    
     return 0;
 }
 
@@ -77,7 +90,7 @@ int main() {
     remove_by_value(&test_list, 3);
     remove_by_value(&test_list, 7);
 
-    reverse(&test_list);
+//     reverse(&test_list);
 
     print_list(test_list);
 }

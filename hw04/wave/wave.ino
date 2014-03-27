@@ -35,23 +35,13 @@ void setup() {
 
   pinMode(ledPin, OUTPUT);
   
-  pinMode(13, OUTPUT);  
-  pinMode(12, OUTPUT);  
-  pinMode(11, OUTPUT);  
-  pinMode(10, OUTPUT);  
-  pinMode(9, OUTPUT);  
-  pinMode(8, OUTPUT);  
-  pinMode(7, OUTPUT);  
-  pinMode(6, OUTPUT);  
+  DDRD = DDRD | B11000000; // sets pins 6 and 7 as outputs without changing 0 through 5  
+  DDRB = DDRB | B00111111; // sets pins 8 through 13 as outputs without changing 14 and 15
 }
 
-void writeByte(int x) {
-  int pin;
-  
-  for (pin=13; pin>=6; pin--) {
-    digitalWrite(pin, x&1);
-    x >>= 1;
-  }
+void writeByte(int x) {  
+  PORTD = (PORTD & B00111111) | (((x & B10000000) >> 1) | ((x & B01000000) << 1));
+  PORTB = (PORTB & B11000000) | (((x & B00100000) >> 5) | ((x & B00010000) >> 3) | ((x & B00001000) >> 1) | ((x & B00000100) << 1) | ((x & B00000010) << 3) | ((x & B00000001) << 5));  
 }
 
 int counter = 0;

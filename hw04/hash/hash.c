@@ -134,7 +134,7 @@ int hash_hashable(Hashable *hashable)
 int equal_int (void *ip, void *jp)
 {
     // FIX ME!
-    return 0;
+    return *(int *)ip == *(int *)jp;
 }
 
 
@@ -142,7 +142,7 @@ int equal_int (void *ip, void *jp)
 int equal_string (void *s1, void *s2)
 {
     // FIX ME!
-    return 0;
+    return *(char *)s1 == *(char *)s2;
 }
 
 
@@ -150,7 +150,10 @@ int equal_string (void *s1, void *s2)
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
     // FIX ME!
-    return 0;
+    
+//     return hash_hashable(h1) == hash_hashable(h2);
+	return h1->equal(h1,h2);
+
 }
 
 
@@ -189,8 +192,12 @@ typedef struct node {
 /* Makes a Node. */
 Node *make_node(Hashable *key, Value *value, Node *next)
 {
-    // FIX ME!
-    return NULL;
+	// FIX ME!
+	Node *node = (Node *) malloc(sizeof(Node));
+	node->key = key;
+	node->value = value;
+	node->next = next;
+    return node;
 }
 
 
@@ -206,7 +213,12 @@ void print_node(Node *node)
 /* Prints all the Nodes in a list. */
 void print_list(Node *node)
 {
-    // FIX ME!
+	// FIX ME!
+	Node *current = node;
+    while (current != NULL){
+    	print_node(current);
+    	current = current->next;
+    }
 }
 
 
@@ -224,6 +236,13 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 Value *list_lookup(Node *list, Hashable *key)
 {
     // FIX ME!
+    Node *current = list;
+    while (current != NULL){
+    	if (key->equal(current->key, key)){
+    		return current->value;
+    	}
+    	current = current->next;
+    }
     return NULL;
 }
 
@@ -307,23 +326,23 @@ int main ()
     value = list_lookup (list, hashable3);
     print_lookup(value);
 
-    // make a map
-    Map *map = make_map(10);
-    map_add(map, hashable1, value1);
-    map_add(map, hashable2, value2);
-
-    printf ("Map\n");
-    print_map(map);
-
-    // run some test lookups
-    value = map_lookup(map, hashable1);
-    print_lookup(value);
-
-    value = map_lookup(map, hashable2);
-    print_lookup(value);
-
-    value = map_lookup(map, hashable3);
-    print_lookup(value);
+//     // make a map
+//     Map *map = make_map(10);
+//     map_add(map, hashable1, value1);
+//     map_add(map, hashable2, value2);
+// 
+//     printf ("Map\n");
+//     print_map(map);
+// 
+//     // run some test lookups
+//     value = map_lookup(map, hashable1);
+//     print_lookup(value);
+// 
+//     value = map_lookup(map, hashable2);
+//     print_lookup(value);
+// 
+//     value = map_lookup(map, hashable3);
+//     print_lookup(value);
 
     return 0;
 }
