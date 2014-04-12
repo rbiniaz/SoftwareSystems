@@ -155,6 +155,50 @@ double *row_sum(Matrix *A) {
     return res;
 }
 
+double *column_sum(Matrix *A){
+	double total;
+    int i, j;
+
+    double *res = malloc(A->cols * sizeof(double));
+
+    for (j=0; j<A->cols; j++) {
+		total = 0.0;
+		for (i=0; i<A->rows; i++) {
+	    	total += A->data[i][j];
+		}
+		res[j] = total;
+    }
+    return res;
+}
+
+double forward_diagonal_sum(Matrix *A){
+	assert(A->rows == A->cols);
+	
+	int i;
+	double total = 0.0;
+
+	for(i = 0; i < A->rows; i++){
+		total += A->data[i][i];	
+	}
+	
+	return total;
+}
+
+double backward_diagonal_sum(Matrix *A){
+	assert(A->rows == A->cols);
+	
+	int i;
+	double total = 0.0;
+
+	for(i = 0; i < A->rows; i++){
+		total += A->data[i][A->rows - 1 - i];	
+	}
+	
+	return total;
+
+}
+
+
 /* 
    http://en.wikipedia.org/wiki/Magic_square
 
@@ -168,6 +212,40 @@ double *row_sum(Matrix *A) {
 
    Feel free to use row_sum().
 */
+
+int is_magic_square(Matrix* A){
+	int i;
+	
+	if (A->rows != A->cols){
+		return 0;
+	}
+	
+	double* row_totals = row_sum(A);
+
+	for (i = 1; i < A->rows; i++){
+		if (row_totals[i] != row_totals[0]){
+			return 0;
+		}
+	}
+	
+	double *column_totals = column_sum(A);
+	
+	for (i = 0; i < A->cols; i++){
+		if (column_totals[i] != row_totals[0]){
+			return 0;
+		}
+	}
+	
+	if (forward_diagonal_sum(A) != row_totals[0]){
+		return 0;
+	}
+	
+	if (backward_diagonal_sum(A) != row_totals[0]){
+		return 0;
+	}
+	
+	return 1;	
+}
 
 
 int main() {
@@ -202,6 +280,37 @@ int main() {
 	printf("row %d\t%lf\n", i, sums[i]);
     }
     // should print 6, 22, 38
+
+	Matrix *E = make_matrix(3, 3);
+   
+   	E->data[0][0] = 2.0;
+   	E->data[0][1] = 7.0;
+   	E->data[0][2] = 6.0;
+   	E->data[1][0] = 9.0;
+   	E->data[1][1] = 5.0;
+   	E->data[1][2] = 1.0;
+   	E->data[2][0] = 4.0;
+   	E->data[2][1] = 3.0;
+   	E->data[2][2] = 8.0;
+   	
+    printf("E\n");
+    print_matrix(E);
+    
+    double *row_totals = row_sum(E);
+    for (i=0; i<E->rows; i++) {
+	printf("row %d\t%lf\n", i, row_totals[i]);
+    }
+    
+    double *column_totals = column_sum(E);
+    for (i=0; i<E->cols; i++) {
+	printf("row %d\t%lf\n", i, column_totals[i]);
+    }
+
+	printf("forward diagonal = %lf\n", forward_diagonal_sum(E));	
+	printf("backward diagonal = %lf\n", backward_diagonal_sum(E));
+
+
+	printf("%i\n", is_magic_square(E));
 
     return 0;
 }
