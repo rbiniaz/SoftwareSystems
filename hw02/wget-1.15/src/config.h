@@ -613,7 +613,7 @@
 #define HAVE_GETTIMEOFDAY 1
 
 /* Define to 1 if you have the `gnutls_priority_set_direct' function. */
-/* #undef HAVE_GNUTLS_PRIORITY_SET_DIRECT */
+#define HAVE_GNUTLS_PRIORITY_SET_DIRECT 1
 
 /* Define if you have the iconv() function and it works. */
 #define HAVE_ICONV 1
@@ -674,13 +674,13 @@
 #define HAVE_LANGINFO_H 1
 
 /* Define to 1 if you have the `dl' library (-ldl). */
-#define HAVE_LIBDL 1
+/* #undef HAVE_LIBDL */
 
 /* Define to 1 if you have the `eay32' library (-leay32). */
 /* #undef HAVE_LIBEAY32 */
 
 /* Define if you have the libgnutls library. */
-/* #undef HAVE_LIBGNUTLS */
+#define HAVE_LIBGNUTLS 1
 
 /* Define to 1 if you have the <libintl.h> header file. */
 /* #undef HAVE_LIBINTL_H */
@@ -698,7 +698,7 @@
 /* #undef HAVE_LIBSOCKET */
 
 /* Define if you have the libssl library. */
-#define HAVE_LIBSSL 1
+/* #undef HAVE_LIBSSL */
 
 /* Define to 1 if you have the `ssl32' library (-lssl32). */
 /* #undef HAVE_LIBSSL32 */
@@ -779,7 +779,7 @@
 #define HAVE_NETINET_IN_H 1
 
 /* Use libnettle */
-/* #undef HAVE_NETTLE */
+#define HAVE_NETTLE 1
 
 /* Define to 1 if you have the `nl_langinfo' function. */
 #define HAVE_NL_LANGINFO 1
@@ -1920,7 +1920,7 @@
 #define OPEN_TRAILING_SLASH_BUG 1
 
 /* Define to be the name of the operating system. */
-#define OS_TYPE "darwin13.0.0"
+#define OS_TYPE "darwin13.1.0"
 
 /* Name of package */
 #define PACKAGE "wget"

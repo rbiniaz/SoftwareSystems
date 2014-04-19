@@ -30,8 +30,8 @@ typedef sem_t Semaphore;
 Semaphore *make_semaphore (int n)
 {
   Semaphore *sem = check_malloc (sizeof(Semaphore));
-  int ret = sem_init(sem, 0, n);
-  if (ret == -1) perror_exit ("sem_init failed");
+  sem = sem_open("semaphore", 0, n);
+//   if (ret == -1) perror_exit ("sem_init failed");
   return sem;
 }
 
@@ -81,20 +81,28 @@ void join_thread (pthread_t thread)
 
 void child_code (Shared *shared)
 {
+
+	int index;
   printf ("Starting child at counter %d\n", shared->counter);
 
   while (1) {
     sem_wait(shared->mutex);
-    if (shared->counter >= shared->end) {
-      sem_signal(shared->mutex);
-      return;
-    }
+    index = shared->counter++;
+    sem_signal(shared->mutex);
+    // if (shared->counter >= shared->end) {
+//       sem_signal(shared->mutex);
+//       return;
+//     }
 
-    shared->array[shared->counter]++;
+	if (index >= shared->end) {
+		return;
+	}
+
+//     shared->array[shared->counter]++;
     shared->counter++;
 
-    if (shared->counter % 10000 == 0) {
-      printf ("%d\n", shared->counter);
+    if (index % 10000 == 0) {
+//       printf ("%d\n", shared->counter);
     }
     sem_signal(shared->mutex);
   }
