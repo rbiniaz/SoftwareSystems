@@ -44,21 +44,25 @@ typedef struct {
   int counter;
   int end;
   int *array;
+  Semaphore *semaphore;
 } Shared;
 
-Shared *make_shared (int end)
-{
-  int i;
-  Shared *shared = check_malloc (sizeof (Shared));
+Shared *make_shared (int end, int num_children) {
+	int i;
+	Shared *shared = check_malloc (sizeof (Shared));
 
-  shared->counter = 0;
-  shared->end = end;
+	shared->counter = 0;
+	shared->end = end;
 
-  shared->array = check_malloc (shared->end * sizeof(int));
-  for (i=0; i<shared->end; i++) {
-    shared->array[i] = 0;
-  }
-  return shared;
+	shared->array = check_malloc (shared->end * sizeof(int));
+	
+	for (i=0; i<shared->end; i++) {
+		shared->array[i] = 0;
+	}
+	
+	shared->semaphore = make_semaphore(num_children);
+	
+	return shared;
 }
 
 pthread_t make_thread(void *(*entry)(void *), Shared *shared)
@@ -68,6 +72,7 @@ pthread_t make_thread(void *(*entry)(void *), Shared *shared)
 
   ret = pthread_create (&thread, NULL, entry, (void *) shared);
   if (ret != 0) perror_exit ("pthread_create failed");
+  
   return thread;
 }
 
@@ -75,6 +80,9 @@ void join_thread (pthread_t thread)
 {
   int ret = pthread_join (thread, NULL);
   if (ret == -1) perror_exit ("pthread_join failed");
+  
+  thread->
+  
 }
 
 void child_code (Shared *shared)
@@ -119,7 +127,7 @@ int main ()
   int i;
   pthread_t child[NUM_CHILDREN];
 
-  Shared *shared = make_shared (100000000);
+  Shared *shared = make_shared (100000000, NUM_CHILDREN);
 
   for (i=0; i<NUM_CHILDREN; i++) {
     child[i] = make_thread (entry, shared);

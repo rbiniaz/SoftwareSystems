@@ -82,13 +82,49 @@ float my_random_float2()
   // use the remaining bit as the mantissa
   mant = x >> 8;
   b.i = (exp << 23) | mant;
-
+    printf("%i\n", b.i);
+    printf("%f\n", b.f);
   return b.f;
 }
 
 // compute a random double using my algorithm
 double my_random_double()
 {
+    long long x;
+    long mant;
+    long exp = 1022;
+    long mask = 1;
+    
+    union {
+        double d;
+        long i;
+    } b;
+    
+    
+    // generate random bits until we see the first set bit
+    while (1) {
+        x = (random() << 32) | random();
+        if (x == 0) {
+            exp -= 31;
+        } else {
+            break;
+        }
+    }
+    
+    // find the location of the first set bit and compute the exponent
+    while (x & mask) {
+        mask <<= 1;
+        exp--;
+    }
+    
+    // use the remaining bit as the mantissa
+    mant = x >> 11;
+    b.i = (exp << 52) | mant;
+//    printf("%li\n", b.i);
+    printf("%f\n", b.d);
+    
+    return b.d;
+    
   // TODO: fill this in
 }
 
